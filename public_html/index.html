@@ -11,6 +11,16 @@
                 height: 800px;
             }
         </style>
+        <script src="scripts/rsvp.js"></script>
+        <script>
+            const weddingDate = new Date("August 19, 2025 14:00:00");
+            const paragraph = document.getElementById("paragraph");
+            const lineBreak = document.createElement("br");
+            let days = Math.floor((weddingDate.valueOf() - Date.now()) / 86400000);
+            const countdown = document.createTextNode(days + " days until the big day!");
+            insertAfter(countdown, paragraph);
+            insertAfter(countdown, lineBreak);
+        </script>
     </head>
     <body>
         <header>
@@ -31,8 +41,7 @@
             <h2>Justin + Sydney</h2>
         </section>
         <br />
-        <p>Join us on Saturday August 9<sup>th</sup>, 2025, for the union of two lovebirds.
-        <br/>Some days until the big day!</p>
+        <p id="paragraph">Join us on Saturday August 9<sup>th</sup>, 2025, for the union of two lovebirds.</p>
         <br/>
 
         <!-- Added container to wrap the image for centering -->
