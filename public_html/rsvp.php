@@ -82,7 +82,7 @@
             <label for="kids">How many kids are you bringing?</label><br>
             <input type="number" id="kids" name="kids" min="0" value="0"><br><br>
     
-            <label for="adults">How many adults are you bringing?</label><br>
+            <label for="adults">How many adults are you bringing (including yourself)?</label><br>
             <input type="number" id="adults" name="adults" min="1" value="1"><br><br>
     
             <input type="submit" value="Submit RSVP">
