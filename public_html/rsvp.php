@@ -10,6 +10,8 @@
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
         $attendance = $_POST['attendance'];
+        $numKids = $_POST['kids'];
+        $numAdults = $_POST['adults'];
         ?>
     </head>
     <body>
@@ -59,17 +61,36 @@
         } else {
         ?>
             <form action="rsvp.php" method="post" id="form">
-                <input type="text" name="firstname" id="firstname">
-                <label for="firstname">First Name</label><br>
-                <input type="text" name="lastname" id="lastname">
-                <label for="lastname">Last Name</label><br>
-                <p>Are you attending?</p><br>
-                <input type="radio" name="attendance" id="yes" value="yes">
-                <label for="yes">Yes</label><br>
-                <input type="radio" name="attendance" id="no" value="no">
-                <label for="no">No</label><br>
-                <input type="submit" value="RSVP">
-            </form>
+            <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding RSVP</title>
+</head>
+<body>
+    <h2>Wedding RSVP</h2>
+        <form action="/submit-your-rsvp" method="post">
+            <label for="firstname">First Name:</label><br>
+            <input type="text" id="firstname" name="firstname" required><br><br>
+    
+            <label for="lastname">Last Name:</label><br>
+            <input type="text" id="lastname" name="lastname" required><br><br>
+    
+            <label for="attendance">Will you be attending?</label><br>
+            <input type="radio" id="yes" name="attendance" value="yes" required>
+            <label for="yes">Yes</label><br>
+            <input type="radio" id="no" name="attendance" value="no">
+            <label for="no">No</label><br><br>
+    
+            <label for="kids">How many kids are you bringing?</label><br>
+            <input type="number" id="kids" name="kids" min="0" value="0"><br><br>
+    
+            <label for="adults">How many adults are you bringing?</label><br>
+            <input type="number" id="adults" name="adults" min="1" value="1"><br><br>
+    
+            <input type="submit" value="Submit RSVP">
+        </form>
             <script src="scripts/rsvp.js"></script>
         <?php
         }
