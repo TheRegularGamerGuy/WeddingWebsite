@@ -24,6 +24,3 @@ function checkForm(e) {
         e.preventDefault();
     }
 }
-
-const form = document.getElementById("form");
-form.addEventListener("submit", checkForm);
