@@ -12,15 +12,6 @@
             }
         </style>
         <script src="scripts/rsvp.js"></script>
-        <script>
-            const weddingDate = new Date("August 19, 2025 14:00:00");
-            const paragraph = document.getElementById("paragraph");
-            const lineBreak = document.createElement("br");
-            let days = Math.floor((weddingDate.valueOf() - Date.now()) / 86400000);
-            const countdown = document.createTextNode(days + " days until the big day!");
-            insertAfter(countdown, paragraph);
-            insertAfter(countdown, lineBreak);
-        </script>
     </head>
     <body>
         <header>
@@ -41,8 +32,26 @@
             <h2>Justin + Sydney</h2>
         </section>
         <br />
-        <p id="paragraph">Join us on Saturday August 9<sup>th</sup>, 2025, for the union of two lovebirds.</p>
-        <br/>
+        <p>Join us on Saturday August 9<sup>th</sup>, 2025, as we celebrate our love in the Sacrament of Matrimony.<br/></p>
+        <br id="linebreak"/>
+        
+        <script>
+            const weddingDate = new Date("August 9, 2025 14:00:00");
+            const lineBreak = document.getElementById("linebreak");
+
+            let days = Math.floor((weddingDate.valueOf() - Date.now()) / 86400000);
+            let countDown = document.createElement("p");
+
+            if (days > 0) {
+                countDown.innerText = days + " days until the big day!";
+            } else if (days == 0) {
+                countDown.innerText = "Today is the big day!";
+            } else {
+                countDown.innerText = "Thank you to all who celebrated with us on our big day!";
+            }
+            
+            document.body.insertBefore(countDown, lineBreak);
+        </script>
 
         <!-- Added container to wrap the image for centering -->
         <div class="image-container">

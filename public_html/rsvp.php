@@ -7,10 +7,6 @@
         <title>Justin & Sydney Wedding</title>
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
         <script src="scripts/rsvp.js"></script>
-        <script>
-            const form = document.getElementById("form");
-            form.addEventListener("submit", checkForm);
-        </script>
         <?php
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -35,6 +31,8 @@
 
         <?php
         if (isset($firstname) && isset($lastname) && isset($attendance)) {
+            echo "$firstname $lastname $attendance";
+
             $file = fopen("../responses.csv", "r") or die("Unable to process response. Try again later.");
             $text = fread($file, filesize("../responses.csv"));
             fclose($file);
@@ -49,6 +47,8 @@
                 }
             }
             if (!$foundname) {
+                echo "$firstname $lastname $attendance";
+
                 $file = fopen("../responses.csv", "a") or die("Unable to process response. Try again later.");
                 $bytes = fwrite($file, $firstname.','.$lastname.','.$attendance.PHP_EOL);
                 fclose($file);
@@ -66,7 +66,7 @@
         } else {
         ?>
         <h2>Wedding RSVP</h2>
-        <form action="rsvp.php" method="post">
+        <form action="rsvp.php" method="post" id="form" name="form">
             <label for="firstname">First Name:</label><br>
             <input type="text" id="firstname" name="firstname" required><br><br>
     
@@ -82,11 +82,16 @@
             <label for="kids">How many kids are you bringing?</label><br>
             <input type="number" id="kids" name="kids" min="0" value="0"><br><br>
     
-            <label for="adults">How many adults are you bringing (including yourself)?</label><br>
+            <label for="adults">How many adults are you bringing?</label><br>
             <input type="number" id="adults" name="adults" min="1" value="1"><br><br>
     
             <input type="submit" value="Submit RSVP">
         </form>
+
+        <script>
+            const form = document.getElementById("form");
+            form.addEventListener("submit", checkForm);
+        </script>
         <?php
         }
         ?>
