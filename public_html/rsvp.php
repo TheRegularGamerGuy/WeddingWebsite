@@ -6,7 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Justin & Sydney Wedding</title>
         <link rel="stylesheet" href="css/style.css" type="text/css"/>
-        <script src="scripts/rsvp.js"></script>
+        <style>
+            .form {
+                border: 2px solid #333333;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: white;
+                box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+                width: 300px;
+                margin: 0 auto;
+            }
+        </style>
         <?php
         $firstname = $_POST['firstname'];
         $lastname = $_POST['lastname'];
@@ -31,11 +41,9 @@
 
         <?php
         if (isset($firstname) && isset($lastname) && isset($attendance)) {
-            echo "$firstname $lastname $attendance";
-
-            $file = fopen("../responses.csv", "r") or die("Unable to process response. Try again later.");
-            $text = fread($file, filesize("../responses.csv"));
-            fclose($file);
+            $reader = fopen("../responses.csv", "r") or die("Unable to process response. Try again later.");
+            $text = fread($reader, filesize("../responses.csv"));
+            fclose($reader);
 
             $responses = explode("\n", $text);
             $foundname = false;
@@ -46,51 +54,62 @@
                     break;
                 }
             }
+
             if (!$foundname) {
-                echo "$firstname $lastname $attendance";
+                $writer = fopen("../responses.csv", "a") or die("Unable to process response. Try again later.");
+                $bytes = fwrite($writer, $firstname.','.$lastname.','.$attendance.PHP_EOL);
+                fclose($writer);
 
-                $file = fopen("../responses.csv", "a") or die("Unable to process response. Try again later.");
-                $bytes = fwrite($file, $firstname.','.$lastname.','.$attendance.PHP_EOL);
-                fclose($file);
-
-                // for error checking
+                # for error checking
                 if (!$bytes) {
                     echo 'Had some trouble sending your response to the server';
                 }
             } else {
-                // needs work
+                # needs work
                 echo '<script>alert("You already submitted a response. Would you like to update it?");</script>';
             }
 
             echo "<h1>Thank you for RSVPing!</h1>";
         } else {
         ?>
-        <h2>Wedding RSVP</h2>
-        <form action="rsvp.php" method="post" id="form" name="form">
-            <label for="firstname">First Name:</label><br>
-            <input type="text" id="firstname" name="firstname" required><br><br>
-    
-            <label for="lastname">Last Name:</label><br>
-            <input type="text" id="lastname" name="lastname" required><br><br>
-    
-            <label for="attendance">Will you be attending?</label><br>
-            <input type="radio" id="yes" name="attendance" value="yes" required>
-            <label for="yes">Yes</label><br>
-            <input type="radio" id="no" name="attendance" value="no">
-            <label for="no">No</label><br><br>
-    
-            <label for="kids">How many kids are you bringing?</label><br>
-            <input type="number" id="kids" name="kids" min="0" value="0"><br><br>
-    
-            <label for="adults">How many adults are you bringing?</label><br>
-            <input type="number" id="adults" name="adults" min="1" value="1"><br><br>
-    
-            <input type="submit" value="Submit RSVP">
-        </form>
+        <div class="form">
+            <h2>Wedding RSVP</h2><br/>
+            <form action="rsvp.php" method="post" id="rsvp">
+                <label for="firstname">First Name:</label><br>
+                <input type="text" id="firstname" name="firstname" required><br><br>
+        
+                <label for="lastname">Last Name:</label><br>
+                <input type="text" id="lastname" name="lastname" required><br><br>
+        
+                <label for="attendance">Will you be attending?</label><br>
+                <input type="radio" id="yes" name="attendance" value="yes" required>
+                <label for="yes">Yes</label><br>
+                <input type="radio" id="no" name="attendance" value="no" checked="checked">
+                <label for="no">No</label><br><br>
+        
+                <label for="kids">How many kids are you bringing?</label><br>
+                <input type="number" id="kids" name="kids" min="0" value="0"><br><br>
+        
+                <label for="adults">How many adults are you bringing?</label><br>
+                <input type="number" id="adults" name="adults" min="1" value="1"><br><br>
+        
+                <input type="submit" value="Submit RSVP">
+            </form>
+        </div>
 
-        <script>
-            const form = document.getElementById("form");
-            form.addEventListener("submit", checkForm);
+        <script src="scripts/rsvp.js">
+            const yes = document.getElementById("yes");
+            let kids = document.getElementById("kids");
+            let adults = document.getElementById("adults");
+            while (true) {
+                if (yes.checked) {
+                    kids.style.display = "block";
+                    adults.style.display = "block";
+                } else {
+                    kids.style.display = "none";
+                    adults.style.display = "none";
+                }
+            }
         </script>
         <?php
         }
