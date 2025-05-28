@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Justin & Sydney Wedding</title>
+        <link rel="stylesheet" href="css/style.css" type="text/css"/>
+        <style>
+            img {
+                width: 800px;
+                height: 800px;
+            }
+        </style>
+        <script src="scripts/rsvp.js"></script>
+    </head>
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="rsvp.php">RSVP</a></li>
+                    <li><a href="info.html">Info</a></li>
+                    <li><a href="registry.html">Registry</a></li>
+                    <li><a href="our-story.html">Our Story</a></li>
+                    <li><a href="wedding-party.html">Wedding Party</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="hero">
+            <h1>Join us on our wedding day!</h1>
+            <h2>Justin + Sydney</h2>
+        </section>
+        <br />
+        <p>Join us on Saturday August 9<sup>th</sup>, 2025, as we celebrate our love in the Sacrament of Matrimony.<br/></p>
+        <br id="linebreak"/>
+        
+        <script>
+            const weddingDate = new Date("August 9, 2025 14:00:00");
+            const lineBreak = document.getElementById("linebreak");
+
+            let days = Math.floor((weddingDate.valueOf() - Date.now()) / 86400000);
+            let countDown = document.createElement("p");
+
+            if (days > 0) {
+                countDown.innerText = days + " days until the big day!";
+            } else if (days == 0) {
+                countDown.innerText = "Today is the big day!";
+            } else {
+                countDown.innerText = "Thank you to all who celebrated with us on our big day!";
+            }
+            
+            document.body.insertBefore(countDown, lineBreak);
+        </script>
+
+        <!-- Added container to wrap the image for centering -->
+        <div class="image-container">
+            <img src="images/engagement-photo1.jpg" alt="Justin & Sydney" />
+        </div>
+
+        <!-- <form>
+            <button type="button" value="RSVP"></button>
+        </form> -->
+
+        <footer>
+            <p>Saturday, August 9<sup>th</sup>, 2025 | Omaha, NE</p>
+        </footer>
+    </body>
+</html>
