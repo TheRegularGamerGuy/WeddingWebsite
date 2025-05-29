@@ -57,7 +57,7 @@
 
             if (!$foundname) {
                 $writer = fopen("../responses.csv", "a") or die("Unable to process response. Try again later.");
-                $bytes = fwrite($writer, $firstname.','.$lastname.','.$attendance.PHP_EOL);
+                $bytes = fwrite($writer, $firstname.','.$lastname.','.$attendance.','.$numKids.','.$numAdults.','.PHP_EOL);
                 fclose($writer);
 
                 # for error checking
@@ -86,30 +86,36 @@
                 <label for="yes">Yes</label><br>
                 <input type="radio" id="no" name="attendance" value="no" checked="checked">
                 <label for="no">No</label><br><br>
-        
-                <label for="kids">How many kids are you bringing?</label><br>
-                <input type="number" id="kids" name="kids" min="0" value="0"><br><br>
-        
-                <label for="adults">How many adults are you bringing?</label><br>
-                <input type="number" id="adults" name="adults" min="1" value="1"><br><br>
+
+                <div id="extra">
+                    <label for="kids">How many kids are you bringing?</label><br>
+                    <input type="number" id="kids" name="kids" min="0"><br><br>
+            
+                    <label for="adults">How many adults are you bringing?</label><br>
+                    <input type="number" id="adults" name="adults" min="0"><br><br>
+                </div>
         
                 <input type="submit" value="Submit RSVP">
             </form>
         </div>
 
-        <script src="scripts/rsvp.js">
+        <script>
             const yes = document.getElementById("yes");
-            let kids = document.getElementById("kids");
-            let adults = document.getElementById("adults");
-            while (true) {
+            const no = document.getElementById("no");
+            const extra = document.getElementById("extra");
+            
+            extra.style.display = "none";
+
+            function displayOnYes(e) {
                 if (yes.checked) {
-                    kids.style.display = "block";
-                    adults.style.display = "block";
+                    extra.style.display = "block";
                 } else {
-                    kids.style.display = "none";
-                    adults.style.display = "none";
+                    extra.style.display = "none";
                 }
             }
+
+            yes.addEventListener("click", displayOnYes);
+            no.addEventListener("click", displayOnYes);
         </script>
         <?php
         }
