@@ -57,7 +57,7 @@
 
             if (!$foundname) {
                 $writer = fopen("../responses.csv", "a") or die("Unable to process response. Try again later.");
-                $bytes = fwrite($writer, $firstname.','.$lastname.','.$attendance.','.$numKids.','.$numAdults.','.PHP_EOL);
+                $bytes = fwrite($writer, $firstname.','.$lastname.','.$attendance.','.$numKids.','.$numAdults.PHP_EOL);
                 fclose($writer);
 
                 # for error checking
