@@ -15,6 +15,7 @@
                 box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
                 width: 300px;
                 margin: 0 auto;
+                margin-bottom: 15%;
             }
         </style>
         <?php
@@ -23,6 +24,7 @@
         $attendance = $_POST['attendance'];
         $numKids = $_POST['kids'];
         $numAdults = $_POST['adults'];
+        $replace = $_POST['hidden'];
         ?>
     </head>
     <body>
@@ -39,6 +41,10 @@
             </nav>
         </header>
 
+        <form action="rsvp.php" method="post" id="replace">
+            <input type="hidden" value="no" id="hidden" name="hidden">
+        </form>
+
         <?php
         if (isset($firstname) && isset($lastname) && isset($attendance)) {
             $reader = fopen("../responses.csv", "r") or die("Unable to process response. Try again later.");
@@ -47,9 +53,9 @@
 
             $responses = explode("\n", $text);
             $foundname = false;
+            $name = preg_replace('/\s+/', '', $firstname).','.preg_replace('/\s+/', '', $lastname);
             foreach ($responses as $response) {
-                $name = $firstname.','.$lastname;
-                if (!strncasecmp($response, $name, strlen($name))) {
+                if (!strncasecmp(preg_replace('/\s+/', '', $response), $name, strlen($name))) {
                     $foundname = true;
                     break;
                 }
@@ -65,8 +71,42 @@
                     echo 'Had some trouble sending your response to the server';
                 }
             } else {
-                # needs work
-                echo '<script>alert("You already submitted a response. Would you like to update it?");</script>';
+                $reader = fopen("../responses.csv", "r") or die("Unable to process response. Try again later.");
+                $text = fread($reader, filesize("../responses.csv"));
+                fclose($reader);
+
+                $writer = fopen("../temp_responses.csv", "w") or die("Unable to process response. Try again later.");
+                $responses = explode("\n", $text);
+                foreach ($responses as $response) {
+                    if (!strncasecmp(preg_replace('/\s+/', '', $response), $name, strlen($name))) {
+                        fwrite($writer, $firstname.','.$lastname.','.$attendance.','.$numKids.','.$numAdults.PHP_EOL);
+                    } else {
+                        fwrite($writer, $response);
+                    }
+                }
+                ?>
+                <script>
+                    const hiddenForm = document.getElementById("replace");
+                    const hiddenInput = document.getElementById("hidden");
+
+                    var result = confirm("You already submitted a response. Would you like to update it?");
+
+                    if (result) {
+                        hiddenInput.value = "yes";
+                        hiddenForm.submit();
+                    } else {
+                        hiddenInput.value = "no";
+                        hiddenForm.submit();
+                    }
+                </script>
+                <?php
+            }
+
+            if ($replace === "yes") {
+                unlink("../responses.csv");
+                rename("../temp_responses.csv", "../responses.csv");
+            } else {
+                unlink("../temp_responses.csv");
             }
 
             echo "<h1>Thank you for RSVPing!</h1>";
@@ -91,8 +131,8 @@
                     <label for="kids">How many kids are you bringing?</label><br>
                     <input type="number" id="kids" name="kids" min="0"><br><br>
             
-                    <label for="adults">How many adults are you bringing?</label><br>
-                    <input type="number" id="adults" name="adults" min="0"><br><br>
+                    <label for="adults">How many adults are you bringing including yourself?</label><br>
+                    <input type="number" id="adults" name="adults" min="1"><br><br>
                 </div>
         
                 <input type="submit" value="Submit RSVP">
